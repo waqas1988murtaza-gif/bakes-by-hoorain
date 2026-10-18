@@ -1,7 +1,9 @@
-"""Bakes by Hoorain - Streamlit website.
+"""Bakes by Hoorain - Streamlit website (warm artisanal bakery design).
 Run: streamlit run app.py  (from this folder)
-Deploy free: push this folder to GitHub, then deploy via share.streamlit.io
+Design: research-backed 2025/26 bakery trends — warm cream canvas, photo hero,
+occasion categories, clear pricing, WhatsApp-first ordering.
 """
+import base64
 import io
 import os
 import urllib.parse
@@ -10,8 +12,6 @@ import streamlit as st
 
 from images_b64 import IMAGES
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-
 WHATSAPP_NUMBER = "923127904882"
 WA_BASE = f"https://wa.me/{WHATSAPP_NUMBER}"
 
@@ -19,8 +19,10 @@ TIKTOK_URL = "https://www.tiktok.com/@bakesbyhoorain0"
 FACEBOOK_URL = "https://www.facebook.com/share/1FJYBezTW8/"
 INSTAGRAM_URL = "https://www.instagram.com/bakesbyhoorain"
 
+SHEET_ID = "1Tc8csdlZ655AU3dFLrj5TC1Fx4uG4rBZOecHV1fgB9w"
+
 st.set_page_config(
-    page_title="Bakes by Hoorain",
+    page_title="Bakes by Hoorain — Customized Cakes in Karachi",
     page_icon="🎂",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -32,20 +34,13 @@ def wa_link(message: str) -> str:
 
 
 def img_bytes(name: str):
-    """Return a file-like object for an embedded image, or None."""
     b64 = IMAGES.get(name)
     if not b64:
         return None
-    import base64
-
     return io.BytesIO(base64.b64decode(b64))
 
 
-SHEET_ID = "1Tc8csdlZ655AU3dFLrj5TC1Fx4uG4rBZOecHV1fgB9w"
-
-
 def fetch_sheet_rows(sheet_name):
-    """Read a tab of the admin Google Sheet as rows (without header). Returns [] on failure."""
     import csv
     import urllib.request
 
@@ -64,7 +59,6 @@ def fetch_sheet_rows(sheet_name):
 
 
 def drive_thumb(link):
-    """Turn a Google Drive share link into a direct thumbnail URL."""
     import re
 
     m = re.search(r"[-\w]{25,}", link or "")
@@ -91,6 +85,24 @@ GALLERY = [
     ("two-tier-pearl.jpg", "Two-Tier Pearl White Cake"),
     ("cupcakes-dessert.jpg", "Cupcakes & Chocolate Dessert Cups"),
     ("sprinkle-donuts.jpg", "Sprinkle Donuts"),
+]
+
+OCCASIONS = [
+    ("pink-birthday-topper.jpg", "Birthday Cakes", "Make their day extra sweet"),
+    ("anniversary-love.jpg", "Anniversary Cakes", "Celebrate your love story"),
+    ("umrah-mubarak.jpg", "Umrah Mubarak", "Blessed treats for blessed journeys"),
+    ("two-tier-pearl.jpg", "Weddings & 2-Tier", "Grand cakes for grand days"),
+    ("sprinkle-donuts.jpg", "Donuts & Treats", "Fresh, glazed & irresistible"),
+    ("elegant-black-gold.jpg", "Custom Themes", "Any design you dream up"),
+]
+
+BESTSELLERS = [
+    ("elegant-black-gold.jpg", "Elegant Black & Gold", "2 lb — Rs 2,000"),
+    ("bear-theme.jpg", "Bear Theme Cake", "2 lb — Rs 2,000"),
+    ("lily-19th.jpg", "Lilly Flower Cake", "Rs 1,200"),
+    ("two-tier-pearl.jpg", "2-Tier Pearl Cake", "3 lb — Rs 4,000"),
+    ("calendar-september.jpg", "Calendar Theme Cake", "2 lb — Rs 2,000"),
+    ("pink-birthday-topper.jpg", "Pink Birthday Cake", "2 lb — Rs 2,000"),
 ]
 
 MENU_CAKES = [
@@ -144,17 +156,8 @@ for _r in fetch_sheet_rows("Gallery"):
     if _src:
         EXTRA_GALLERY.append((_src, _cap))
 
-BESTSELLERS = [
-    ("elegant-black-gold.jpg", "Elegant Black & Gold", "2 lb — Rs 2,000"),
-    ("bear-theme.jpg", "Bear Theme Cake", "2 lb — Rs 2,000"),
-    ("lily-19th.jpg", "Lilly Flower Cake", "Rs 1,200"),
-    ("two-tier-pearl.jpg", "2-Tier Pearl Cake", "3 lb — Rs 4,000"),
-    ("calendar-september.jpg", "Calendar Theme Cake", "2 lb — Rs 2,000"),
-    ("pink-birthday-topper.jpg", "Pink Birthday Cake", "2 lb — Rs 2,000"),
-]
-
 # Refresh bestseller price strings from the live sheet when names match
-if "_sheet_menu" in dir() and _sheet_menu:
+if _sheet_menu:
     _price_by_name = {}
     for _r in _sheet_menu:
         if len(_r) >= 3 and _r[0].strip() and _r[2].strip():
@@ -168,138 +171,246 @@ if "_sheet_menu" in dir() and _sheet_menu:
         _new_best.append((_fname, _name, _price_str))
     BESTSELLERS = _new_best
 
-# ---------------- Style (premium dark bakery theme) ----------------
+
+# ---------------- Style ----------------
 st.markdown(
     """
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
     html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
-    .hero { text-align: center; padding: 2.2rem 0 1rem 0;
-            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,160,180,.14), transparent);
-            border-radius: 0 0 28px 28px; }
-    .hero .logo-ring { display:inline-block; padding:6px; border-radius:50%;
-            background: conic-gradient(from 180deg, #d4af37, #f6e2a8, #d4af37, #a87c1f, #d4af37);
-            box-shadow: 0 10px 40px rgba(212,175,55,.35); margin-bottom: .9rem; }
-    .hero .logo-ring img { border-radius:50%; display:block; }
-    .hero h1 { font-family: 'Playfair Display', serif; font-weight:700;
-            font-size: 2.9rem; margin: .2rem 0;
-            background: linear-gradient(120deg, #f6e2a8, #e8a0b4 60%, #f6e2a8);
-            -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero p.tag { color: #d9bfae; font-size: 1.02rem; font-weight:300; letter-spacing:.4px; margin-top:.4rem; }
-    .hero p.tag b { color:#f6e2a8; font-weight:500; }
-    .sec-head { font-family:'Playfair Display', serif; font-size:1.7rem; color:#f6e2a8;
-            text-align:center; margin: 0 0 .2rem 0; }
-    .sec-sub { text-align:center; color:#a98d7d; font-size:.92rem; margin-bottom:1.1rem; font-weight:300;}
-    .orn { text-align:center; color:#d4af37; letter-spacing:12px; font-size:.8rem; margin:.4rem 0 1.2rem 0; }
-    .price-tag { color: #f6e2a8; font-weight: 600; font-size: 1.08rem; }
-    .card { background: linear-gradient(160deg, #2b1a12, #1f130d);
-            border: 1px solid rgba(212,175,55,.28); border-radius: 18px;
-            padding: 0.9rem; text-align: center; height: 100%;
-            box-shadow: 0 12px 32px rgba(0,0,0,.45); transition: transform .25s ease; }
-    .card:hover { transform: translateY(-4px); border-color: rgba(212,175,55,.6); }
-    .card img { border-radius: 12px; }
-    .card h4 { font-family:'Playfair Display',serif; color: #f6e2a8; margin: 0.6rem 0 0.15rem 0; font-size: 1.05rem; }
-    .card p { color: #c9a98f; margin: 0 0 0.6rem 0; font-size: 0.9rem; }
-    .wa-btn { display: inline-block; background: linear-gradient(135deg,#25D366,#1eb856);
-              color: white !important; padding: 0.7rem 1.7rem; border-radius: 999px; font-weight: 600;
-              text-decoration: none; margin: 0.35rem 0.15rem; font-size:1rem;
-              box-shadow: 0 8px 24px rgba(37,211,102,.35); transition: transform .2s ease; }
-    .wa-btn:hover { transform: scale(1.04); color: white !important; }
-    .wa-btn.big { font-size:1.12rem; padding:.85rem 2.2rem; }
-    .social-btn { display: inline-block; background: rgba(212,175,55,.12); color: #f6e2a8 !important;
-              border:1px solid rgba(212,175,55,.45);
-              padding: 0.55rem 1.25rem; border-radius: 999px; font-weight: 500;
-              text-decoration: none; margin: 0.25rem; font-size: 0.92rem; transition: all .2s ease;}
-    .social-btn:hover { background: rgba(212,175,55,.28); color:#fff !important; }
-    .menu-row { background: rgba(255,255,255,.03); border:1px solid rgba(212,175,55,.14);
-            border-radius:14px; padding:.55rem .9rem; margin-bottom:.5rem; }
-    .howto { background: linear-gradient(160deg,#2b1a12,#1f130d); border:1px solid rgba(212,175,55,.28);
-            border-radius:18px; padding:1.2rem 1.4rem; color:#e8d5c4; }
-    .howto b { color:#f6e2a8; }
-    .footer { text-align: center; color: #8a6f5f; font-size: 0.85rem; padding: 2rem 0 1rem 0; font-weight:300;}
-    .stImage img { border-radius: 14px; }
+    .stApp { background: #fdf8f3; }
+
+    /* HERO */
+    .hero { display:flex; flex-wrap:wrap; align-items:center; gap:1.6rem;
+            background: linear-gradient(135deg, #fff5ee 0%, #fdeee4 55%, #fbd9c8 100%);
+            border-radius: 26px; padding: 2rem 2.2rem; margin-bottom: .6rem;
+            border: 1px solid #f3ddc9; box-shadow: 0 18px 50px rgba(190,120,80,.14); }
+    .hero-text { flex: 1 1 300px; }
+    .hero-kicker { color:#c26a4a; font-weight:600; letter-spacing:3px; font-size:.78rem;
+            text-transform:uppercase; margin-bottom:.5rem; }
+    .hero h1 { font-family:'Playfair Display',serif; font-size:2.7rem; line-height:1.12;
+            color:#4a2c22; margin:.1rem 0 .7rem 0; }
+    .hero h1 em { color:#e8557a; font-style:italic; }
+    .hero p.sub { color:#8a6a58; font-size:1.02rem; font-weight:300; margin-bottom:1.2rem; }
+    .hero-photo { flex: 1 1 260px; text-align:center; }
+    .hero-photo img { width:100%; max-width:380px; border-radius:22px;
+            box-shadow: 0 24px 60px rgba(190,90,60,.28); border:6px solid #fff; }
+
+    /* BUTTONS */
+    .wa-btn { display:inline-block; background:linear-gradient(135deg,#25D366,#1da851);
+            color:#fff !important; padding:.8rem 1.9rem; border-radius:999px; font-weight:600;
+            text-decoration:none; font-size:1.02rem; margin:.3rem .2rem;
+            box-shadow:0 10px 26px rgba(37,211,102,.35); transition:transform .18s ease; }
+    .wa-btn:hover { transform:translateY(-2px); color:#fff !important; }
+    .ghost-btn { display:inline-block; background:#fff; color:#c26a4a !important;
+            border:2px solid #eec9ae; padding:.72rem 1.7rem; border-radius:999px; font-weight:600;
+            text-decoration:none; font-size:1rem; margin:.3rem .2rem; transition:all .18s ease;}
+    .ghost-btn:hover { border-color:#e8557a; color:#e8557a !important; }
+
+    /* TRUST BADGES */
+    .badges { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin:1.1rem 0 .4rem 0; }
+    .badge { background:#fff; border:1px solid #f0d9c2; color:#8a5a3b; border-radius:999px;
+            padding:.45rem 1.1rem; font-size:.86rem; font-weight:500;
+            box-shadow:0 4px 14px rgba(190,120,80,.08); }
+    .badge b { color:#e8557a; }
+
+    /* SECTIONS */
+    .sec { text-align:center; margin:2.2rem 0 .3rem 0; }
+    .sec h2 { font-family:'Playfair Display',serif; font-size:1.9rem; color:#4a2c22; margin-bottom:.25rem; }
+    .sec p { color:#a07a62; font-weight:300; font-size:.95rem; }
+    .sec .rule { width:64px; height:3px; background:linear-gradient(90deg,#e8557a,#f5b942);
+            border-radius:2px; margin:.6rem auto 0 auto; }
+
+    /* CARDS */
+    .card { background:#fff; border:1px solid #f3e2d2; border-radius:20px; padding:.85rem;
+            text-align:center; height:100%; box-shadow:0 10px 30px rgba(190,120,80,.10);
+            transition:transform .22s ease, box-shadow .22s ease; }
+    .card:hover { transform:translateY(-5px); box-shadow:0 18px 44px rgba(190,120,80,.20); }
+    .card img { border-radius:14px; }
+    .card h4 { font-family:'Playfair Display',serif; color:#4a2c22; font-size:1.08rem; margin:.65rem 0 .15rem 0; }
+    .card .desc { color:#a07a62; font-size:.85rem; font-weight:300; margin:0 0 .35rem 0; }
+    .card .pr { color:#e8557a; font-weight:600; font-size:1.02rem; margin-bottom:.55rem; }
+    .occ-card { cursor:pointer; }
+    .occ-card h4 { font-size:1.12rem; }
+
+    /* MENU */
+    .menu-item { background:#fff; border:1px solid #f3e2d2; border-radius:16px;
+            padding:.7rem 1rem; margin-bottom:.55rem; box-shadow:0 6px 18px rgba(190,120,80,.07); }
+    .menu-item .nm { font-weight:500; color:#4a2c22; font-size:.98rem; }
+    .menu-item .pr { color:#e8557a; font-weight:600; font-size:1.05rem; white-space:nowrap; }
+    .menu-item .sz { color:#b08a6d; font-size:.82rem; }
+
+    /* MISC */
+    .note-bar { background:#fff7ef; border:1px dashed #e8b98a; border-radius:16px;
+            padding:.9rem 1.2rem; text-align:center; color:#8a5a3b; margin-top:.9rem; }
+    .howto { background:#fff; border:1px solid #f3e2d2; border-radius:20px; padding:1.3rem 1.5rem;
+            color:#6b4a38; box-shadow:0 10px 30px rgba(190,120,80,.10); }
+    .howto b { color:#4a2c22; }
+    .howto .step { display:flex; gap:.8rem; align-items:flex-start; margin-bottom:.7rem; }
+    .howto .n { background:linear-gradient(135deg,#e8557a,#f5b942); color:#fff; font-weight:600;
+            width:30px; height:30px; border-radius:50%; display:flex; align-items:center;
+            justify-content:center; flex-shrink:0; font-size:.9rem; }
+    .social-btn { display:inline-block; background:#fff; color:#c26a4a !important;
+            border:1.5px solid #eec9ae; padding:.55rem 1.3rem; border-radius:999px; font-weight:500;
+            text-decoration:none; margin:.25rem; font-size:.92rem; transition:all .18s ease; }
+    .social-btn:hover { border-color:#e8557a; color:#e8557a !important; transform:translateY(-2px); }
+    .footer { text-align:center; color:#b08a6d; font-size:.85rem; padding:2.2rem 0 1.2rem 0; font-weight:300; }
+    .stImage img { border-radius:14px; }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# ---------------- Hero ----------------
-logo = img_bytes("logo.jpg")
-st.markdown('<div class="hero">', unsafe_allow_html=True)
-if logo:
-    import base64 as _b64
 
-    _logo_b64 = _b64.b64encode(logo.getvalue()).decode()
+def section(title, sub=""):
     st.markdown(
-        '<div class="logo-ring"><img src="data:image/jpeg;base64,' + _logo_b64 + '" width="150"></div>',
+        f'<div class="sec"><h2>{title}</h2><p>{sub}</p><div class="rule"></div></div>',
         unsafe_allow_html=True,
     )
+
+
+# ---------------- HERO ----------------
+_hero_b64 = base64.b64encode(img_bytes("pink-birthday-topper.jpg").getvalue()).decode()
+_logo_b64 = base64.b64encode(img_bytes("logo.jpg").getvalue()).decode()
 st.markdown(
-    "<h1>Bakes by Hoorain</h1>"
-    '<p class="tag">Customized Cakes &mdash; <b>Homemade with Love</b><br>Made Just for Your Special Moments &middot; Karachi</p>',
+    '<div class="hero">'
+    '<div class="hero-text">'
+    f'<img src="data:image/jpeg;base64,{_logo_b64}" width="86" style="border-radius:50%;border:3px solid #fff;box-shadow:0 8px 22px rgba(190,120,80,.25);">'
+    '<div class="hero-kicker">Homemade with love · Karachi</div>'
+    "<h1>Customized cakes, made just for your <em>special moments</em></h1>"
+    '<p class="sub">Birthdays, anniversaries, Umrah celebrations, Pinterest designs & fresh donuts — '
+    "every order baked at home and finished by hand, exactly the way you pictured it.</p>"
+    f'<a class="wa-btn" href="{wa_link("Assalam-o-Alaikum! I want to order a cake from Bakes by Hoorain.")}" target="_blank">💬 Order on WhatsApp</a>'
+    '<a class="ghost-btn" href="#price-menu">See the menu</a>'
+    "</div>"
+    '<div class="hero-photo">'
+    f'<img src="data:image/jpeg;base64,{_hero_b64}" alt="Signature pink birthday cake">'
+    "</div>"
+    "</div>",
     unsafe_allow_html=True,
 )
+
 st.markdown(
-    f'<a class="wa-btn big" href="{wa_link("Assalam-o-Alaikum! I want to order a cake from Bakes by Hoorain.")}" target="_blank">💬 Order on WhatsApp</a>',
+    '<div class="badges">'
+    '<span class="badge">📍 Karachi based home bakery</span>'
+    '<span class="badge">Cakes from <b>Rs 500</b></span>'
+    '<span class="badge">Treats from <b>Rs 200</b></span>'
+    '<span class="badge"><b>100%</b> made to order</span>'
+    "</div>",
     unsafe_allow_html=True,
 )
-st.markdown("</div>", unsafe_allow_html=True)
 
-# ---------------- Cake slider ----------------
-def _slider_html():
-    import base64
 
-    tags = []
-    for fname, cap in GALLERY:
-        b64 = IMAGES.get(fname)
-        if not b64:
-            continue
-        safe_cap = cap.replace('"', "").replace("<", "").replace(">", "")
-        tags.append(
-            '<img src="data:image/jpeg;base64,' + b64 + '" alt="' + safe_cap + '" loading="lazy">'
+# ---------------- SHOP BY OCCASION ----------------
+section("Shop by Occasion", "Tell us the celebration — we'll bake the cake")
+ocols = st.columns(3)
+for i, (fname, name, desc) in enumerate(OCCASIONS):
+    p = img_bytes(fname)
+    with ocols[i % 3]:
+        st.markdown('<div class="card occ-card">', unsafe_allow_html=True)
+        if p:
+            st.image(p, use_container_width=True)
+        st.markdown(f"<h4>{name}</h4><p class='desc'>{desc}</p>", unsafe_allow_html=True)
+        st.markdown(
+            f'<a class="wa-btn" href="{wa_link(f"Assalam-o-Alaikum! I want a {name} cake from Bakes by Hoorain.")}" target="_blank">Order</a>',
+            unsafe_allow_html=True,
         )
-    doubled = "".join(tags) * 2
-    return (
-        "<style>"
-        ".cslider{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);"
-        "mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}"
-        ".ctrack{display:flex;gap:12px;width:max-content;animation:cslide 45s linear infinite;padding:4px 0}"
-        ".ctrack img{height:150px;width:150px;object-fit:cover;border-radius:16px;border:1px solid rgba(212,175,55,.35);box-shadow:0 8px 22px rgba(0,0,0,.5)}"
-        "@keyframes cslide{to{transform:translateX(-50%)}}"
-        "</style>"
-        '<div class="cslider"><div class="ctrack">' + doubled + "</div></div>"
-    )
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
-def _sec(title, sub=""):
-    st.markdown(f'<div class="sec-head">{title}</div>', unsafe_allow_html=True)
-    if sub:
-        st.markdown(f'<div class="sec-sub">{sub}</div>', unsafe_allow_html=True)
-    st.markdown('<div class="orn">✦ ✦ ✦</div>', unsafe_allow_html=True)
-
-
-_sec("Our Cakes on Display", "Fresh from the oven — sliding showcase")
-st.components.v1.html(_slider_html(), height=175, scrolling=False)
-
-# ---------------- Bestsellers ----------------
-_sec("Bestsellers", "Most loved cakes by our customers")
-cols = st.columns(3)
+# ---------------- BESTSELLERS ----------------
+section("Bestsellers", "Most loved cakes by our customers")
+bcols = st.columns(3)
 for i, (fname, name, price) in enumerate(BESTSELLERS):
     p = img_bytes(fname)
-    with cols[i % 3]:
+    with bcols[i % 3]:
         st.markdown('<div class="card">', unsafe_allow_html=True)
         if p:
             st.image(p, use_container_width=True)
-        st.markdown(f"<h4>{name}</h4><p>{price}</p>", unsafe_allow_html=True)
+        st.markdown(f"<h4>{name}</h4><p class='pr'>{price}</p>", unsafe_allow_html=True)
         st.markdown(
             f'<a class="wa-btn" href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({price})")}" target="_blank">Order</a>',
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)
-st.divider()
 
-# ---------------- Gallery ----------------
-_sec("Gallery", "Tap any photo to view it bigger")
+
+# ---------------- SLIDER ----------------
+section("Fresh From Our Oven", "A little glimpse of what we bake")
+_slider_tags = []
+for fname, cap in GALLERY:
+    b64 = IMAGES.get(fname)
+    if not b64:
+        continue
+    safe_cap = cap.replace('"', "").replace("<", "").replace(">", "")
+    _slider_tags.append(
+        '<img src="data:image/jpeg;base64,' + b64 + '" alt="' + safe_cap + '" loading="lazy">'
+    )
+_slider_doubled = "".join(_slider_tags) * 2
+st.components.v1.html(
+    "<style>"
+    ".cslider{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);"
+    "mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}"
+    ".ctrack{display:flex;gap:14px;width:max-content;animation:cslide 45s linear infinite;padding:6px 0}"
+    ".ctrack img{height:160px;width:160px;object-fit:cover;border-radius:18px;border:4px solid #fff;"
+    "box-shadow:0 10px 26px rgba(190,120,80,.22)}"
+    "@keyframes cslide{to{transform:translateX(-50%)}}"
+    "</style>"
+    '<div class="cslider"><div class="ctrack">' + _slider_doubled + "</div></div>",
+    height=190,
+    scrolling=False,
+)
+
+
+# ---------------- MENU ----------------
+section("Price Menu", "Live from our kitchen — always up to date")
+st.markdown('<div id="price-menu"></div>', unsafe_allow_html=True)
+st.markdown(
+    '<p style="text-align:center;font-family:\'Playfair Display\',serif;font-size:1.3rem;color:#4a2c22;margin:1rem 0 .8rem 0;">Cakes</p>',
+    unsafe_allow_html=True,
+)
+for name, size, price in MENU_CAKES:
+    mc1, mc2 = st.columns([4, 2])
+    with mc1:
+        st.markdown(
+            f'<div class="menu-item"><span class="nm">{name}</span><br><span class="sz">{size}</span></div>',
+            unsafe_allow_html=True,
+        )
+    with mc2:
+        st.markdown(
+            f'<div class="menu-item" style="text-align:center;"><span class="pr">Rs {price:,}</span><br>'
+            f'<a class="wa-btn" style="padding:.4rem 1.1rem;font-size:.88rem;margin:.3rem 0 0 0;" '
+            f'href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({size} - Rs {price:,})")}" target="_blank">Order</a></div>',
+            unsafe_allow_html=True,
+        )
+
+st.markdown(
+    '<p style="text-align:center;font-family:\'Playfair Display\',serif;font-size:1.3rem;color:#4a2c22;margin:1.2rem 0 .8rem 0;">Desserts</p>',
+    unsafe_allow_html=True,
+)
+for name, size, price in MENU_DESSERTS:
+    mc1, mc2 = st.columns([4, 2])
+    with mc1:
+        st.markdown(
+            f'<div class="menu-item"><span class="nm">{name}</span><br><span class="sz">{size}</span></div>',
+            unsafe_allow_html=True,
+        )
+    with mc2:
+        st.markdown(
+            f'<div class="menu-item" style="text-align:center;"><span class="pr">Rs {price:,}</span><br>'
+            f'<a class="wa-btn" style="padding:.4rem 1.1rem;font-size:.88rem;margin:.3rem 0 0 0;" '
+            f'href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({size} - Rs {price:,})")}" target="_blank">Order</a></div>',
+            unsafe_allow_html=True,
+        )
+
+st.markdown(
+    '<div class="note-bar">🎨 Custom designs available on request — just message us on WhatsApp!</div>',
+    unsafe_allow_html=True,
+)
+
+
+# ---------------- GALLERY ----------------
+section("Gallery", "Every cake tells a story — tap any photo to view it bigger")
 gcols = st.columns(3)
 shown = 0
 for fname, caption in GALLERY:
@@ -313,66 +424,33 @@ for src, caption in EXTRA_GALLERY:
     with gcols[shown % 3]:
         st.image(src, caption=caption, use_container_width=True)
     shown += 1
-st.divider()
 
-# ---------------- Menu ----------------
-_sec("Price Menu", "Live from our kitchen — updated daily")
-st.markdown('<div class="sec-head" style="font-size:1.25rem;">Cakes</div>', unsafe_allow_html=True)
-for name, size, price in MENU_CAKES:
-    c1, c2, c3 = st.columns([3, 2, 2])
-    with c1:
-        st.markdown(f'<div class="menu-row"><b style="color:#f7ece4;">{name}</b></div>', unsafe_allow_html=True)
-    with c2:
-        st.markdown(f'<div class="menu-row"><span class="price-tag">Rs {price:,}</span> <span style="color:#a98d7d;font-size:.85rem;">· {size}</span></div>', unsafe_allow_html=True)
-    with c3:
-        st.markdown(
-            f'<a class="wa-btn" href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({size} - Rs {price:,})")}" target="_blank">Order</a>',
-            unsafe_allow_html=True,
-        )
 
-st.markdown('<div class="sec-head" style="font-size:1.25rem;margin-top:.6rem;">Desserts</div>', unsafe_allow_html=True)
-for name, size, price in MENU_DESSERTS:
-    c1, c2, c3 = st.columns([3, 2, 2])
-    with c1:
-        st.markdown(f'<div class="menu-row"><b style="color:#f7ece4;">{name}</b></div>', unsafe_allow_html=True)
-    with c2:
-        st.markdown(f'<div class="menu-row"><span class="price-tag">Rs {price:,}</span> <span style="color:#a98d7d;font-size:.85rem;">· {size}</span></div>', unsafe_allow_html=True)
-    with c3:
-        st.markdown(
-            f'<a class="wa-btn" href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({size} - Rs {price:,})")}" target="_blank">Order</a>',
-            unsafe_allow_html=True,
-        )
-
-st.markdown(
-    '<div class="howto" style="margin-top:.8rem;text-align:center;">🎨 Custom designs available on request — just message on WhatsApp!</div>',
-    unsafe_allow_html=True,
-)
-
-# ---------------- How to order ----------------
-_sec("How to Order", "Three easy steps")
+# ---------------- HOW TO ORDER ----------------
+section("How to Order", "Three easy steps")
 st.markdown(
     '<div class="howto">'
-    "1. <b>Pick</b> your cake from the menu or gallery above.<br>"
-    "2. <b>Tap Order</b> — WhatsApp opens with your order message ready.<br>"
-    "3. <b>Send</b> it to us on <b>0312 7904882</b> — we'll confirm your design & delivery. ✅"
+    '<div class="step"><div class="n">1</div><div><b>Pick</b> your cake from the menu or gallery above.</div></div>'
+    '<div class="step"><div class="n">2</div><div><b>Tap Order</b> — WhatsApp opens with your order message ready.</div></div>'
+    '<div class="step"><div class="n">3</div><div><b>Send</b> it to us on <b>0312 7904882</b> — we\'ll confirm your design & delivery. ✅</div></div>'
     "</div>",
     unsafe_allow_html=True,
 )
 st.markdown(
-    f'<div style="text-align:center;margin-top:.8rem;"><a class="wa-btn big" href="{wa_link("Assalam-o-Alaikum! I want to place an order.")}" target="_blank">💬 Chat on WhatsApp: 0312 7904882</a></div>',
+    f'<div style="text-align:center;margin-top:1rem;"><a class="wa-btn" href="{wa_link("Assalam-o-Alaikum! I want to place an order.")}" target="_blank">💬 Chat on WhatsApp: 0312 7904882</a></div>',
     unsafe_allow_html=True,
 )
 
-# ---------------- About / Contact ----------------
-_sec("About", "Our story")
+
+# ---------------- ABOUT ----------------
+section("About", "Baked at home, with love")
 st.markdown(
-    '<div class="howto" style="text-align:center;">Bakes by Hoorain is a home-based bakery in Karachi, making customized cakes '
-    "for birthdays, anniversaries, umrah celebrations and every special moment — "
-    "homemade with love. 🌸</div>",
+    '<div class="howto" style="text-align:center;">Bakes by Hoorain is a home-based bakery in Karachi, '
+    "making customized cakes for birthdays, anniversaries, Umrah celebrations and every special moment. 🌸</div>",
     unsafe_allow_html=True,
 )
 st.markdown(
-    '<div style="text-align:center;margin-top:.9rem;">'
+    '<div style="text-align:center;margin-top:1rem;">'
     f'<a class="social-btn" href="{TIKTOK_URL}" target="_blank">🎵 TikTok</a>'
     f'<a class="social-btn" href="{INSTAGRAM_URL}" target="_blank">📸 Instagram</a>'
     f'<a class="social-btn" href="{FACEBOOK_URL}" target="_blank">📘 Facebook</a>'
@@ -380,6 +458,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 st.markdown(
-    '<div class="footer">Bakes by Hoorain · Karachi · WhatsApp 0312 7904882</div>',
+    '<div class="footer">Bakes by Hoorain · Karachi · WhatsApp 0312 7904882<br>Made with 💖 at home</div>',
     unsafe_allow_html=True,
 )
