@@ -175,8 +175,8 @@ if _sheet_menu:
 # ---------------- Style ----------------
 st.markdown(
     """
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap');
     html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
     .stApp { background: #fdf8f3; }
 
