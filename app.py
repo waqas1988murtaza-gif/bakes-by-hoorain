@@ -168,26 +168,56 @@ if "_sheet_menu" in dir() and _sheet_menu:
         _new_best.append((_fname, _name, _price_str))
     BESTSELLERS = _new_best
 
-# ---------------- Style ----------------
+# ---------------- Style (premium dark bakery theme) ----------------
 st.markdown(
     """
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-    .hero { text-align: center; padding: 1.2rem 0 0.4rem 0; }
-    .hero h1 { color: #d6336c; font-size: 2.4rem; margin-bottom: 0.1rem; }
-    .hero p.tag { color: #a61e4d; font-size: 1.05rem; margin-top: 0; }
-    .price-tag { color: #d6336c; font-weight: 700; font-size: 1.1rem; }
-    .card { background: #fff5f7; border: 1px solid #ffd6e0; border-radius: 14px;
-            padding: 0.8rem; text-align: center; height: 100%; }
-    .card h4 { color: #a61e4d; margin: 0.4rem 0 0.1rem 0; font-size: 1rem; }
-    .card p { color: #666; margin: 0 0 0.5rem 0; font-size: 0.9rem; }
-    .wa-btn { display: inline-block; background: #25D366; color: white !important;
-              padding: 0.55rem 1.3rem; border-radius: 999px; font-weight: 700;
-              text-decoration: none; margin: 0.3rem 0.15rem; }
-    .wa-btn:hover { background: #1eb856; color: white !important; }
-    .social-btn { display: inline-block; background: #d6336c; color: white !important;
-              padding: 0.5rem 1.1rem; border-radius: 999px; font-weight: 600;
-              text-decoration: none; margin: 0.2rem; font-size: 0.92rem; }
-    .footer { text-align: center; color: #999; font-size: 0.85rem; padding: 2rem 0 1rem 0; }
+    html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
+    .hero { text-align: center; padding: 2.2rem 0 1rem 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,160,180,.14), transparent);
+            border-radius: 0 0 28px 28px; }
+    .hero .logo-ring { display:inline-block; padding:6px; border-radius:50%;
+            background: conic-gradient(from 180deg, #d4af37, #f6e2a8, #d4af37, #a87c1f, #d4af37);
+            box-shadow: 0 10px 40px rgba(212,175,55,.35); margin-bottom: .9rem; }
+    .hero .logo-ring img { border-radius:50%; display:block; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-weight:700;
+            font-size: 2.9rem; margin: .2rem 0;
+            background: linear-gradient(120deg, #f6e2a8, #e8a0b4 60%, #f6e2a8);
+            -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p.tag { color: #d9bfae; font-size: 1.02rem; font-weight:300; letter-spacing:.4px; margin-top:.4rem; }
+    .hero p.tag b { color:#f6e2a8; font-weight:500; }
+    .sec-head { font-family:'Playfair Display', serif; font-size:1.7rem; color:#f6e2a8;
+            text-align:center; margin: 0 0 .2rem 0; }
+    .sec-sub { text-align:center; color:#a98d7d; font-size:.92rem; margin-bottom:1.1rem; font-weight:300;}
+    .orn { text-align:center; color:#d4af37; letter-spacing:12px; font-size:.8rem; margin:.4rem 0 1.2rem 0; }
+    .price-tag { color: #f6e2a8; font-weight: 600; font-size: 1.08rem; }
+    .card { background: linear-gradient(160deg, #2b1a12, #1f130d);
+            border: 1px solid rgba(212,175,55,.28); border-radius: 18px;
+            padding: 0.9rem; text-align: center; height: 100%;
+            box-shadow: 0 12px 32px rgba(0,0,0,.45); transition: transform .25s ease; }
+    .card:hover { transform: translateY(-4px); border-color: rgba(212,175,55,.6); }
+    .card img { border-radius: 12px; }
+    .card h4 { font-family:'Playfair Display',serif; color: #f6e2a8; margin: 0.6rem 0 0.15rem 0; font-size: 1.05rem; }
+    .card p { color: #c9a98f; margin: 0 0 0.6rem 0; font-size: 0.9rem; }
+    .wa-btn { display: inline-block; background: linear-gradient(135deg,#25D366,#1eb856);
+              color: white !important; padding: 0.7rem 1.7rem; border-radius: 999px; font-weight: 600;
+              text-decoration: none; margin: 0.35rem 0.15rem; font-size:1rem;
+              box-shadow: 0 8px 24px rgba(37,211,102,.35); transition: transform .2s ease; }
+    .wa-btn:hover { transform: scale(1.04); color: white !important; }
+    .wa-btn.big { font-size:1.12rem; padding:.85rem 2.2rem; }
+    .social-btn { display: inline-block; background: rgba(212,175,55,.12); color: #f6e2a8 !important;
+              border:1px solid rgba(212,175,55,.45);
+              padding: 0.55rem 1.25rem; border-radius: 999px; font-weight: 500;
+              text-decoration: none; margin: 0.25rem; font-size: 0.92rem; transition: all .2s ease;}
+    .social-btn:hover { background: rgba(212,175,55,.28); color:#fff !important; }
+    .menu-row { background: rgba(255,255,255,.03); border:1px solid rgba(212,175,55,.14);
+            border-radius:14px; padding:.55rem .9rem; margin-bottom:.5rem; }
+    .howto { background: linear-gradient(160deg,#2b1a12,#1f130d); border:1px solid rgba(212,175,55,.28);
+            border-radius:18px; padding:1.2rem 1.4rem; color:#e8d5c4; }
+    .howto b { color:#f6e2a8; }
+    .footer { text-align: center; color: #8a6f5f; font-size: 0.85rem; padding: 2rem 0 1rem 0; font-weight:300;}
+    .stImage img { border-radius: 14px; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -197,14 +227,20 @@ st.markdown(
 logo = img_bytes("logo.jpg")
 st.markdown('<div class="hero">', unsafe_allow_html=True)
 if logo:
-    st.image(logo, width=170)
+    import base64 as _b64
+
+    _logo_b64 = _b64.b64encode(logo.getvalue()).decode()
+    st.markdown(
+        '<div class="logo-ring"><img src="data:image/jpeg;base64,' + _logo_b64 + '" width="150"></div>',
+        unsafe_allow_html=True,
+    )
 st.markdown(
-    "<h1>🎂 Bakes by Hoorain</h1>"
-    '<p class="tag">Customized Cakes — Homemade with Love<br>Made Just for Your Special Moments · Karachi</p>',
+    "<h1>Bakes by Hoorain</h1>"
+    '<p class="tag">Customized Cakes &mdash; <b>Homemade with Love</b><br>Made Just for Your Special Moments &middot; Karachi</p>',
     unsafe_allow_html=True,
 )
 st.markdown(
-    f'<a class="wa-btn" href="{wa_link("Assalam-o-Alaikum! I want to order a cake from Bakes by Hoorain.")}" target="_blank">💬 Order on WhatsApp</a>',
+    f'<a class="wa-btn big" href="{wa_link("Assalam-o-Alaikum! I want to order a cake from Bakes by Hoorain.")}" target="_blank">💬 Order on WhatsApp</a>',
     unsafe_allow_html=True,
 )
 st.markdown("</div>", unsafe_allow_html=True)
@@ -228,19 +264,25 @@ def _slider_html():
         ".cslider{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);"
         "mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}"
         ".ctrack{display:flex;gap:12px;width:max-content;animation:cslide 45s linear infinite;padding:4px 0}"
-        ".ctrack img{height:150px;width:150px;object-fit:cover;border-radius:16px;box-shadow:0 6px 16px rgba(214,51,108,.18)}"
+        ".ctrack img{height:150px;width:150px;object-fit:cover;border-radius:16px;border:1px solid rgba(212,175,55,.35);box-shadow:0 8px 22px rgba(0,0,0,.5)}"
         "@keyframes cslide{to{transform:translateX(-50%)}}"
         "</style>"
         '<div class="cslider"><div class="ctrack">' + doubled + "</div></div>"
     )
 
 
-st.subheader("🎠 Our Cakes on Display")
+def _sec(title, sub=""):
+    st.markdown(f'<div class="sec-head">{title}</div>', unsafe_allow_html=True)
+    if sub:
+        st.markdown(f'<div class="sec-sub">{sub}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="orn">✦ ✦ ✦</div>', unsafe_allow_html=True)
+
+
+_sec("Our Cakes on Display", "Fresh from the oven — sliding showcase")
 st.components.v1.html(_slider_html(), height=175, scrolling=False)
-st.divider()
 
 # ---------------- Bestsellers ----------------
-st.header("⭐ Bestsellers")
+_sec("Bestsellers", "Most loved cakes by our customers")
 cols = st.columns(3)
 for i, (fname, name, price) in enumerate(BESTSELLERS):
     p = img_bytes(fname)
@@ -257,8 +299,7 @@ for i, (fname, name, price) in enumerate(BESTSELLERS):
 st.divider()
 
 # ---------------- Gallery ----------------
-st.header("🖼️ Gallery")
-st.caption("Tap any photo to view it bigger.")
+_sec("Gallery", "Tap any photo to view it bigger")
 gcols = st.columns(3)
 shown = 0
 for fname, caption in GALLERY:
@@ -275,62 +316,67 @@ for src, caption in EXTRA_GALLERY:
 st.divider()
 
 # ---------------- Menu ----------------
-st.header("📋 Price Menu")
-st.subheader("Cakes")
+_sec("Price Menu", "Live from our kitchen — updated daily")
+st.markdown('<div class="sec-head" style="font-size:1.25rem;">Cakes</div>', unsafe_allow_html=True)
 for name, size, price in MENU_CAKES:
     c1, c2, c3 = st.columns([3, 2, 2])
     with c1:
-        st.markdown(f"**{name}**")
+        st.markdown(f'<div class="menu-row"><b style="color:#f7ece4;">{name}</b></div>', unsafe_allow_html=True)
     with c2:
-        st.markdown(f'<span class="price-tag">Rs {price:,}</span> · {size}', unsafe_allow_html=True)
+        st.markdown(f'<div class="menu-row"><span class="price-tag">Rs {price:,}</span> <span style="color:#a98d7d;font-size:.85rem;">· {size}</span></div>', unsafe_allow_html=True)
     with c3:
         st.markdown(
             f'<a class="wa-btn" href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({size} - Rs {price:,})")}" target="_blank">Order</a>',
             unsafe_allow_html=True,
         )
 
-st.subheader("Desserts")
+st.markdown('<div class="sec-head" style="font-size:1.25rem;margin-top:.6rem;">Desserts</div>', unsafe_allow_html=True)
 for name, size, price in MENU_DESSERTS:
     c1, c2, c3 = st.columns([3, 2, 2])
     with c1:
-        st.markdown(f"**{name}**")
+        st.markdown(f'<div class="menu-row"><b style="color:#f7ece4;">{name}</b></div>', unsafe_allow_html=True)
     with c2:
-        st.markdown(f'<span class="price-tag">Rs {price:,}</span> · {size}', unsafe_allow_html=True)
+        st.markdown(f'<div class="menu-row"><span class="price-tag">Rs {price:,}</span> <span style="color:#a98d7d;font-size:.85rem;">· {size}</span></div>', unsafe_allow_html=True)
     with c3:
         st.markdown(
             f'<a class="wa-btn" href="{wa_link(f"Assalam-o-Alaikum! I want to order: {name} ({size} - Rs {price:,})")}" target="_blank">Order</a>',
             unsafe_allow_html=True,
         )
 
-st.info("Custom designs available on request — just message on WhatsApp! 🎨")
-st.divider()
-
-# ---------------- How to order ----------------
-st.header("📦 How to Order")
 st.markdown(
-    """
-    1. **Pick** your cake from the menu or gallery above.
-    2. **Tap Order** — WhatsApp opens with your order message ready.
-    3. **Send** it to us on **0312 7904882** — we'll confirm your design & delivery. ✅
-    """
-)
-st.markdown(
-    f'<a class="wa-btn" href="{wa_link("Assalam-o-Alaikum! I want to place an order.")}" target="_blank">💬 Chat on WhatsApp: 0312 7904882</a>',
+    '<div class="howto" style="margin-top:.8rem;text-align:center;">🎨 Custom designs available on request — just message on WhatsApp!</div>',
     unsafe_allow_html=True,
 )
-st.divider()
 
-# ---------------- About / Contact ----------------
-st.header("💖 About")
+# ---------------- How to order ----------------
+_sec("How to Order", "Three easy steps")
 st.markdown(
-    "Bakes by Hoorain is a home-based bakery in Karachi, making customized cakes "
-    "for birthdays, anniversaries, umrah celebrations and every special moment — "
-    "homemade with love. 🌸"
+    '<div class="howto">'
+    "1. <b>Pick</b> your cake from the menu or gallery above.<br>"
+    "2. <b>Tap Order</b> — WhatsApp opens with your order message ready.<br>"
+    "3. <b>Send</b> it to us on <b>0312 7904882</b> — we'll confirm your design & delivery. ✅"
+    "</div>",
+    unsafe_allow_html=True,
 )
 st.markdown(
+    f'<div style="text-align:center;margin-top:.8rem;"><a class="wa-btn big" href="{wa_link("Assalam-o-Alaikum! I want to place an order.")}" target="_blank">💬 Chat on WhatsApp: 0312 7904882</a></div>',
+    unsafe_allow_html=True,
+)
+
+# ---------------- About / Contact ----------------
+_sec("About", "Our story")
+st.markdown(
+    '<div class="howto" style="text-align:center;">Bakes by Hoorain is a home-based bakery in Karachi, making customized cakes '
+    "for birthdays, anniversaries, umrah celebrations and every special moment — "
+    "homemade with love. 🌸</div>",
+    unsafe_allow_html=True,
+)
+st.markdown(
+    '<div style="text-align:center;margin-top:.9rem;">'
     f'<a class="social-btn" href="{TIKTOK_URL}" target="_blank">🎵 TikTok</a>'
     f'<a class="social-btn" href="{INSTAGRAM_URL}" target="_blank">📸 Instagram</a>'
-    f'<a class="social-btn" href="{FACEBOOK_URL}" target="_blank">📘 Facebook</a>',
+    f'<a class="social-btn" href="{FACEBOOK_URL}" target="_blank">📘 Facebook</a>'
+    "</div>",
     unsafe_allow_html=True,
 )
 st.markdown(
